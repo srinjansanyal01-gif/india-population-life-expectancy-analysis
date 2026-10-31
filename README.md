@@ -19,6 +19,9 @@ The study examines historical trends, tests the stationarity of the time series,
 - Evaluate forecasting performance using Mean Squared Error (MSE).
 
 ## Dataset
+The project uses an original demographic dataset and a processed dataset containing population density and life expectancy for India from 1970 to 2022.
+
+See the [`data/README.md`](data/README.md) for dataset descriptions and preparation details.
 
 - Country: India
 - Time period: 1970–2022
