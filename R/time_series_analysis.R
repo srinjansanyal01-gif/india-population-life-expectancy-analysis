@@ -4,17 +4,33 @@ y_population <- ts(z$Population.Density, start = min(z$Year), frequency = 1)
 y_life_expectancy <- ts(z$Life.Expectancy, start = min(z$Year), frequency = 1)
 
 # Population Density Plot using ggplot2
-ggplot(z, aes(x = Year, y = Population.Density)) +
+p1<-ggplot(z, aes(x = Year, y = Population.Density)) +
   geom_line(color = "red") +
   labs(title = "Population Density Over Time", x = "Year", y = "Population Density") +
   theme_minimal()
 
 # Life Expectancy Plot using ggplot2
-ggplot(z, aes(x = Year, y = Life.Expectancy)) +
+p2<-ggplot(z, aes(x = Year, y = Life.Expectancy)) +
   geom_line(color = "blue") +
   labs(title = "Life Expectancy Over Time", x = "Year", y = "Life Expectancy") +
   theme_minimal()
 
+
+# Install and load gridExtra
+install.packages("gridExtra")
+library(gridExtra)
+
+# Combine plots side by side
+combined_plot <- grid.arrange(p1, p2, ncol = 2)
+
+# Save the combined figure
+ggsave(
+  filename = "C:/Users/srinjan sanyal/Documents/trend_plot.png",
+  plot = combined_plot,
+  width = 12,
+  height = 5,
+  dpi = 300
+)
 
 # ADF Test for Population Density
 adf_test1<-adf.test(y_population)
@@ -65,6 +81,18 @@ model_lifeexpectancy
 forecast_pop <- forecast(model_popdensity, h=20)
 forecast_life <- forecast(model_lifeexpectancy, h=20)
 
+
+# Save both ARIMA forecast plots in one image
+png("C:/Users/srinjan sanyal/Documents/arima_forecast.png",
+    width = 2400, height = 1000, res = 300)
+
+par(mfrow = c(1, 2))
+
+plot(forecast_pop, main = "ARIMA: Population Density")
+plot(forecast_life, main = "ARIMA: Life Expectancy")
+
+dev.off()
+
 # Plot forecasts
 plot(forecast_pop, main="ARIMA Forecast: Population Density", xlab="Year", 
      ylab="Population Density", col="darkred")
@@ -88,6 +116,19 @@ summary(holt_life)
 
 # Plot the Holt forecast
 plot(holt_life, main="Holt Forecast: Life Expectancy", xlab="Year", ylab="Life Expectancy", col="darkgreen")
+
+
+# Save both Holt forecast plots in one image
+png("C:/Users/srinjan sanyal/Documents/holt_forecast.png",
+    width = 2400, height = 1000, res = 300)
+
+par(mfrow = c(1, 2))
+
+plot(holt_pop, main = "Holt: Population Density")
+plot(holt_life, main = "Holt: Life Expectancy")
+
+dev.off()
+
 
 MSE <- mean((y_population - fitted(holt_pop))^2)
 MSE
